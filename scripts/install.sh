@@ -3,7 +3,7 @@ set -u
 set -o pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=lib/common.sh
+# shellcheck disable=SC1091
 source "$SCRIPT_DIR/lib/common.sh"
 
 REPO_ROOT="$(resolve_repo_root)"
@@ -63,7 +63,7 @@ names=()
 paths=()
 enabled_flags=()
 
-while IFS='|' read -r name path enabled owner requires post_validate; do
+while IFS='|' read -r name path enabled _owner _requires _post_validate; do
   [[ -z "$name" ]] && continue
   names+=("$name")
   paths+=("$path")

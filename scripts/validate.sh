@@ -3,7 +3,7 @@ set -u
 set -o pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-# shellcheck source=lib/common.sh
+# shellcheck disable=SC1091
 source "$SCRIPT_DIR/lib/common.sh"
 
 REPO_ROOT="$(resolve_repo_root)"
@@ -64,7 +64,7 @@ check_links() {
   done < <(perl -ne 'while(/\]\(([^)]+)\)/g){print "$1\n"}' "$skill_md")
 }
 
-while IFS='|' read -r name path enabled owner requires post_validate; do
+while IFS='|' read -r name path enabled _owner _requires post_validate; do
   [[ -z "$name" ]] && continue
   entry_count=$((entry_count + 1))
 
