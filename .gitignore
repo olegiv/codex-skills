@@ -1,0 +1,26 @@
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+*.iml
+*.ipr
+*.iws
+
+# Operating Systems
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+public-staging/skills/*
+!public-staging/skills/.gitkeep
+public-staging/mirrors/*
+!public-staging/mirrors/.gitkeep

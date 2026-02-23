@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+set -u
+set -o pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=lib/common.sh
+source "$SCRIPT_DIR/lib/common.sh"
+
+TARGET_PATH="skills"
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  scan_public_risks.sh [--path <path>]
+
+Returns non-zero if disallowed patterns are found.
+USAGE
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --path)
+      [[ $# -ge 2 ]] || die "Missing value for --path"
+      TARGET_PATH="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      die "Unknown argument: $1"
+      ;;
+  esac
+done
+
+command -v rg >/dev/null 2>&1 || die "ripgrep (rg) is required"
+
+if [[ ! -e "$TARGET_PATH" ]]; then
+  die "Path not found: $TARGET_PATH"
+fi
+
+ALLOW_RE='(<your-token>|<your-secret>|\$[A-Z0-9_]*(TOKEN|KEY|SECRET|PASSWORD)|FIGMA_OAUTH_TOKEN|example\.local|example\.com)'
+FOUND=0
+
+scan_block() {
+  local label="$1"
+  local pattern="$2"
+  local hits
+
+  hits="$(rg -n --no-heading -I -e "$pattern" "$TARGET_PATH" || true)"
+  if [[ -z "$hits" ]]; then
+    return
+  fi
+
+  hits="$(printf '%s\n' "$hits" | rg -v "$ALLOW_RE" || true)"
+  if [[ -z "$hits" ]]; then
+    return
+  fi
+
+  FOUND=1
+  log "ERROR" "${label} hits detected"
+  printf '%s\n' "$hits"
+}
+
+scan_block "Absolute local paths" '/(Users|private/var)/'
+scan_block "Internal identifiers" '(iruorg(\.local|4)|olegiv)'
+scan_block "Private key headers" 'BEGIN (RSA|OPENSSH|EC) PRIVATE KEY'
+scan_block "Bearer literals" '[Aa]uthorization[[:space:]]*:[[:space:]]*[Bb]earer[[:space:]]+[A-Za-z0-9._+/=-]{16,}'
+scan_block "Probable secret literals" "(api[_-]?key|token|secret|password)[[:space:]]*[:=][[:space:]]*['\\\"][A-Za-z0-9._+/=-]{16,}['\\\"]"
+
+if (( FOUND == 1 )); then
+  exit 1
+fi
+
+log "INFO" "No public-risk pattern hits in $TARGET_PATH"

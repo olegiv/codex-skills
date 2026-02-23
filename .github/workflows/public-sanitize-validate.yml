@@ -1,0 +1,28 @@
+name: public-sanitize-validate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install shellcheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Shellcheck scripts
+        run: |
+          shellcheck scripts/*.sh
+          shellcheck scripts/lib/*.sh
+
+      - name: Scan public risks
+        run: ./scripts/scan_public_risks.sh --path skills
+
+      - name: Validate skill contracts
+        run: ./scripts/validate.sh

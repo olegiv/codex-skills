@@ -1,0 +1,4 @@
+interface:
+  display_name: "Commit Workflow"
+  short_description: "Prepare and run safe Git commits with approval"
+  default_prompt: "Prepare a commit message, ask for approval, and commit with git commands after explicit approval."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "PHP Prebuild Quality"
+  short_description: "Drupal 11 PHP quality gate with strict/scoped checks"
+  default_prompt: "Run Drupal 11 pre-build PHP quality checks (lint, PHPCS, PHPStan, PHPUnit) in strict or scoped mode, then report stage outcomes and failures in fix-first order."

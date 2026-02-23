@@ -1,0 +1,24 @@
+skills:
+  - name: drupal-sdc-figma-parity
+    path: skills/drupal-sdc-figma-parity
+    enabled: true
+    owner: team-ai
+    tags: [figma, drupal, parity]
+    requires: []
+    post_validate: ""
+
+  - name: commit-workflow
+    path: skills/commit-workflow
+    enabled: true
+    owner: team-ai
+    tags: [git, workflow, commit]
+    requires: []
+    post_validate: ""
+
+  - name: php-prebuild-quality
+    path: skills/php-prebuild-quality
+    enabled: true
+    owner: team-ai
+    tags: [php, drupal, quality]
+    requires: []
+    post_validate: "./scripts/quick_validate.py"
