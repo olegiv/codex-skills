@@ -34,7 +34,18 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-command -v rg >/dev/null 2>&1 || die "ripgrep (rg) is required"
+SEARCH_TOOL=""
+FILTER_TOOL=""
+if command -v rg >/dev/null 2>&1; then
+  SEARCH_TOOL="rg"
+  FILTER_TOOL="rg"
+elif command -v grep >/dev/null 2>&1; then
+  SEARCH_TOOL="grep"
+  FILTER_TOOL="grep"
+  log "WARN" "ripgrep not found; using grep fallback"
+else
+  die "Neither ripgrep (rg) nor grep is available"
+fi
 
 if [[ ! -e "$TARGET_PATH" ]]; then
   die "Path not found: $TARGET_PATH"
@@ -48,12 +59,20 @@ scan_block() {
   local pattern="$2"
   local hits
 
-  hits="$(rg -n --no-heading -I -e "$pattern" "$TARGET_PATH" || true)"
+  if [[ "$SEARCH_TOOL" == "rg" ]]; then
+    hits="$(rg -n --no-heading -I -e "$pattern" "$TARGET_PATH" || true)"
+  else
+    hits="$(grep -RInE --binary-files=without-match "$pattern" "$TARGET_PATH" || true)"
+  fi
   if [[ -z "$hits" ]]; then
     return
   fi
 
-  hits="$(printf '%s\n' "$hits" | rg -v "$ALLOW_RE" || true)"
+  if [[ "$FILTER_TOOL" == "rg" ]]; then
+    hits="$(printf '%s\n' "$hits" | rg -v "$ALLOW_RE" || true)"
+  else
+    hits="$(printf '%s\n' "$hits" | grep -Ev "$ALLOW_RE" || true)"
+  fi
   if [[ -z "$hits" ]]; then
     return
   fi
