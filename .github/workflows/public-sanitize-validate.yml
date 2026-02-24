@@ -1,4 +1,6 @@
 name: public-sanitize-validate
+permissions:
+  contents: read
 
 on:
   pull_request:
