@@ -82,8 +82,8 @@ scan_block() {
   printf '%s\n' "$hits"
 }
 
-scan_block "Absolute local paths" '/(Users|private/var)/'
-scan_block "Internal identifiers" '(iruorg(\.local|4)|olegiv)'
+scan_block "Absolute local paths" '/([U]sers|private/[v]ar)/'
+scan_block "Internal identifiers" '([i]ruorg(\.local|4)|[o]legiv)'
 scan_block "Private key headers" 'BEGIN (RSA|OPENSSH|EC) PRIVATE KEY'
 scan_block "Bearer literals" '[Aa]uthorization[[:space:]]*:[[:space:]]*[Bb]earer[[:space:]]+[A-Za-z0-9._+/=-]{16,}'
 scan_block "Probable secret literals" "(api[_-]?key|token|secret|password)[[:space:]]*[:=][[:space:]]*['\\\"][A-Za-z0-9._+/=-]{16,}['\\\"]"

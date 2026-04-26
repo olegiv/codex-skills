@@ -45,7 +45,7 @@ The repo is publishable only if scanner and validator pass.
 
 Forbidden in published content:
 
-- absolute local paths (`/Users/...`, `/private/var/...`)
+- absolute local paths (`<local-home>/...`, `<local-temp>/...`)
 - internal identifiers (hostnames, project IDs, usernames)
 - concrete token/secret/password values
 
