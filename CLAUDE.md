@@ -23,6 +23,7 @@ A public-safe repository of reusable Codex skills (AI agent instruction sets). I
 
 # Install a single skill
 ./scripts/install.sh --skills drupal-sdc-figma-parity
+./scripts/install.sh --skills claude-codex-dual-pass
 
 # Update installed skills and re-validate
 ./scripts/update.sh --skills all
@@ -47,6 +48,7 @@ shellcheck scripts/*.sh scripts/lib/*.sh
 
 - **`skills/manifest.yml`** — Central registry of all skills. Pure-bash parser in `scripts/lib/common.sh` reads it as pipe-delimited records. Must be updated for any skill add/remove/rename.
 - **`skills/<name>/SKILL.md`** — Required entry point for each skill. May have `references/`, `scripts/`, `agents/` subdirectories.
+- **`skills/claude-codex-dual-pass/`** — Reusable Claude Code + Codex dual-pass workflow with `cc <slash-command>` aliases and AGENTS.md snippet helpers.
 - **`scripts/lib/common.sh`** — Shared shell library (`log`, `err`, `die`, `trim`, `strip_quotes`, `normalize_bool`, `resolve_repo_root`, `parse_manifest`).
 - **`scripts/sanitize/rules.txt`** — Perl substitution rules that replace private data with placeholders.
 - **`public-staging/`** — Output directory for sanitized content. Contents are gitignored except `.gitkeep` files.

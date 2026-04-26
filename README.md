@@ -24,6 +24,7 @@ Install selected skills only:
 
 ```bash
 ./scripts/install.sh --skills drupal-sdc-figma-parity
+./scripts/install.sh --skills claude-codex-dual-pass
 ```
 
 Update linked/copied skills and run validation:
@@ -35,7 +36,7 @@ Update linked/copied skills and run validation:
 Uninstall one skill from local Codex home:
 
 ```bash
-rm -rf "$CODEX_HOME/skills/drupal-sdc-figma-parity"
+rm -rf "$CODEX_HOME/skills/<skill-name>"
 ```
 
 ## Public Sanitization Policy
@@ -108,6 +109,31 @@ git submodule add <git-url> dev/AI/codex-skills
 
 ```text
 Use $drupal-sdc-figma-parity. Run workflow for this Figma node URL.
+```
+
+Claude Code + Codex dual-pass examples:
+
+```text
+cc /finalize full
+cc /project:test accept
+cc /user:security-audit read-only
+```
+
+## AGENTS.md Snippet Helpers
+
+The `claude-codex-dual-pass` skill includes helper scripts for projects
+that want the shared `cc` workflow in their own `AGENTS.md`.
+
+Check whether a project already has the managed snippet:
+
+```bash
+$CODEX_HOME/skills/claude-codex-dual-pass/scripts/check_agents_snippet.sh <project-root>
+```
+
+Insert or update the managed snippet explicitly:
+
+```bash
+$CODEX_HOME/skills/claude-codex-dual-pass/scripts/apply_agents_snippet.sh <project-root>
 ```
 
 ## Troubleshooting
