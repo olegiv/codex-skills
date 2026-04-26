@@ -1,6 +1,6 @@
 ---
 name: claude-codex-dual-pass
-description: Use when the user asks Codex to run a Claude Code command and then independently perform the same workflow itself, especially `cc <slash-command>`, "run Claude Code command", "Claude edits allowed", "full permissions", "then Codex do the same", "dual pass", or "/finalize".
+description: Use when the user asks Codex to run a Claude Code command and then independently perform the same workflow itself, especially `cc /slash-command`, "run Claude Code command", "Claude edits allowed", "full permissions", "then Codex do the same", "dual pass", or "/finalize".
 ---
 
 # Claude + Codex Dual Pass
@@ -30,10 +30,9 @@ Treat `read-only`, `accept`, `edits`, `full`, and `bypass` as control words for 
 
 For bare `cc /cmd`:
 
-- Read the command markdown before choosing the mode.
-- Use `acceptEdits` when the command clearly performs edits, fixes, updates, formatting, finalization, or a check-and-repair workflow.
-- Use `plan` when the command is clearly read-only, such as audit, review, report, explain, inspect, or check-only instructions.
-- If the command may mutate files or use broad permissions and the markdown is risky or unclear, ask before running Claude.
+- Use `--permission-mode bypassPermissions` by default.
+- Read the command markdown to understand the workflow, expected outputs, and verification steps, but do not use it to downgrade the default Claude permission mode.
+- Only use `plan` or `acceptEdits` when the user explicitly provides a permission modifier such as `read-only`, `accept`, or `edits`.
 
 ## Invocation Samples
 
@@ -78,11 +77,11 @@ Use $claude-codex-dual-pass. Run Claude Code /user:security-audit read-only, the
 - Full permissions, `full`, `bypass`: run Claude with `--permission-mode bypassPermissions`.
 - Only use `--dangerously-skip-permissions` when the user explicitly asks for that exact bypass.
 
-For bare `cc /cmd`, infer only after reading the command markdown. If the requested Claude command can mutate files and the markdown does not clearly fit a default mode, stop and ask for permission before running Claude.
+For bare `cc /cmd`, always run Claude with `--permission-mode bypassPermissions`. The command markdown is still required context for Codex's independent pass, but it is not used to infer a safer default mode.
 
 ## Command Resolution
 
-Resolve and read the command markdown before deciding how risky the Claude run is:
+Resolve and read the command markdown before running Claude so Codex understands the workflow:
 
 - `/project:name` resolves to `<project-root>/.claude/commands/name.md`.
 - `/user:name` resolves to `$HOME/.claude/commands/name.md`.
@@ -100,7 +99,8 @@ For namespaced commands, map colons to path segments where the command layout us
    - focused `git diff --stat` when there are existing changes
 2. Parse `cc` shorthand if used, resolve the Claude command markdown, and summarize its intended workflow.
 3. Run Claude Code exactly within the requested permission envelope:
-   - `claude -p '<slash-command and args>' --permission-mode <mode>`
+   - Bare `cc /cmd`: `claude -p '<slash-command and args>' --permission-mode bypassPermissions`
+   - Explicit permission modifier: `claude -p '<slash-command and args>' --permission-mode <mapped-mode>`
 4. After Claude exits:
    - capture Claude output,
    - run `git status --short`,
@@ -117,6 +117,15 @@ For namespaced commands, map colons to path segments where the command layout us
    - skipped or blocked steps.
 
 Do not stop after Claude says the task is complete. Do not outsource final verification to Claude.
+
+## Waiting For Claude
+
+Claude Code can work quietly for a long time. Treat no stdout/stderr as normal unless the process has exited or produced an actual error.
+
+- Do not call a running Claude process stalled because it is silent.
+- Do not interrupt, kill, or retry Claude solely because elapsed time is long or output is quiet.
+- Poll or wait until Claude exits, unless the user explicitly interrupts/stops it or the process actually exits/errors.
+- User-facing progress updates should say "Claude is still running" or "Claude is working quietly". Avoid "stalled" unless there is concrete evidence of a deadlock beyond silence.
 
 ## AGENTS.md Integration
 
