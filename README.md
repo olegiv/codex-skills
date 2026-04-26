@@ -82,6 +82,12 @@ Run scanner manually:
 ./scripts/scan_public_risks.sh --path public-staging/skills
 ```
 
+User-, org-, and project-specific sanitization rules must stay in ignored
+local files:
+
+- `scripts/sanitize/local.rules.txt` for extra Perl rewrite rules
+- `scripts/sanitize/local.denylist.txt` for extra scan patterns
+
 Run validation manually:
 
 ```bash

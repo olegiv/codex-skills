@@ -50,7 +50,7 @@ shellcheck scripts/*.sh scripts/lib/*.sh
 - **`skills/<name>/SKILL.md`** — Required entry point for each skill. May have `references/`, `scripts/`, `agents/` subdirectories.
 - **`skills/claude-codex-dual-pass/`** — Reusable Claude Code + Codex dual-pass workflow with `cc <slash-command>` aliases and AGENTS.md snippet helpers.
 - **`scripts/lib/common.sh`** — Shared shell library (`log`, `err`, `die`, `trim`, `strip_quotes`, `normalize_bool`, `resolve_repo_root`, `parse_manifest`).
-- **`scripts/sanitize/rules.txt`** — Perl substitution rules that replace private data with placeholders.
+- **`scripts/sanitize/rules.txt`** — Public-safe Perl substitution rules that replace private data with placeholders. User-, org-, and project-specific rules belong only in ignored `scripts/sanitize/local.rules.txt` or `scripts/sanitize/local.denylist.txt`.
 - **`public-staging/`** — Output directory for sanitized content. Contents are gitignored except `.gitkeep` files.
 
 ### CI Gate

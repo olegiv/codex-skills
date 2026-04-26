@@ -11,6 +11,7 @@ DEST="$REPO_ROOT/public-staging/skills"
 CHECK_ONLY="false"
 FAIL_ON_HIT="false"
 RULES_FILE="$SCRIPT_DIR/sanitize/rules.txt"
+LOCAL_RULES_FILE="$SCRIPT_DIR/sanitize/local.rules.txt"
 
 SOURCES=()
 
@@ -83,14 +84,24 @@ find_skill_dirs() {
   find "$source" -mindepth 1 -maxdepth 1 -type d -not -name '.*' -exec test -f '{}/SKILL.md' ';' -print
 }
 
-apply_rules_to_file() {
+apply_rules_file_to_file() {
   local file="$1"
+  local rules_file="$2"
   local rule
   while IFS= read -r rule || [[ -n "$rule" ]]; do
     [[ -z "$rule" ]] && continue
     [[ "$rule" =~ ^# ]] && continue
     perl -0777 -i -pe "$rule" "$file"
-  done < "$RULES_FILE"
+  done < "$rules_file"
+}
+
+apply_rules_to_file() {
+  local file="$1"
+
+  apply_rules_file_to_file "$file" "$RULES_FILE"
+  if [[ -f "$LOCAL_RULES_FILE" ]]; then
+    apply_rules_file_to_file "$file" "$LOCAL_RULES_FILE"
+  fi
 }
 
 sanitize_tree() {

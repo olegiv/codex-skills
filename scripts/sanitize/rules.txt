@@ -1,11 +1,8 @@
 # Perl rewrite rules for public sanitization.
 # Format: full perl expression, e.g. s|from|to|g
 
-s#/[U]sers/[^/\s]+/\.codex#\$CODEX_HOME#g
-s#/private/[v]ar/www/[^/\s]+/drupal#<repo-root>#g
-s#[i]ruorg\.local#example.local#g
-s#[i]ruorg4#<project-id>#g
-s#[o]legiv#<username>#g
+s#(?:/[A-Za-z0-9._-]+)+/\.codex#\$CODEX_HOME#g
+s#\b[A-Za-z0-9.-]+\.local\b#example.local#g
 s#(export\s+[A-Z0-9_]*(?:TOKEN|KEY|SECRET|PASSWORD)[A-Z0-9_]*\s*=\s*["']).+?(["'])#$1<your-token>$2#g
 s#(FIGMA_OAUTH_TOKEN\s*=\s*["']).+?(["'])#$1<your-token>$2#g
 s#(Authorization:\s*Bearer\s+)[A-Za-z0-9._\-+/=]{16,}#$1<your-token>#g

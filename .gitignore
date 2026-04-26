@@ -24,3 +24,7 @@ public-staging/skills/*
 !public-staging/skills/.gitkeep
 public-staging/mirrors/*
 !public-staging/mirrors/.gitkeep
+
+# Local private sanitization and scan rules.
+scripts/sanitize/local.rules.txt
+scripts/sanitize/local.denylist.txt
