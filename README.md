@@ -11,6 +11,31 @@ public-sanitization pipeline before publishing.
 - `.github/workflows/public-sanitize-validate.yml` CI gate
 - `public-staging/` sanitized pre-publish staging output
 - `AGENTS.md` contributor and automation operating contract
+- `.claude/shared/` git submodule with shared Claude Code agents,
+  commands, and hooks (see [Cloning](#cloning))
+
+## Cloning
+
+This repo includes a git submodule at `.claude/shared` that pulls in
+shared Claude Code tooling from
+[`olegiv/claude-code-support-tools`](https://github.com/olegiv/claude-code-support-tools).
+Clone with submodules:
+
+```bash
+git clone --recurse-submodules https://github.com/olegiv/codex-skills.git
+```
+
+If already cloned without `--recurse-submodules`:
+
+```bash
+git submodule update --init --recursive
+```
+
+To pull the latest submodule commit:
+
+```bash
+git submodule update --remote --merge
+```
 
 ## Quick Start
 

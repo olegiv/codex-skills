@@ -1,0 +1,1 @@
+../shared/agents/project-architect.md

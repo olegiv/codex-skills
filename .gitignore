@@ -28,3 +28,6 @@ public-staging/mirrors/*
 # Local private sanitization and scan rules.
 scripts/sanitize/local.rules.txt
 scripts/sanitize/local.denylist.txt
+
+# Local Claude Code permissions (personal, never committed).
+.claude/settings.local.json

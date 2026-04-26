@@ -1,0 +1,1 @@
+../shared/commands/setup-project-tools.md

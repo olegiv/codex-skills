@@ -38,6 +38,20 @@ shellcheck scripts/*.sh scripts/lib/*.sh
 ./scripts/validate.sh
 ```
 
+## Shared Claude Code Tooling
+
+Shared agents, commands, and hooks live in the
+`olegiv/claude-code-support-tools` git submodule at `.claude/shared`.
+They surface into this project via relative symlinks under `.claude/agents/`,
+`.claude/commands/`, and `.claude/hooks/`. Treat the symlinked files as
+read-only — edits belong upstream in the submodule repo.
+
+Bump the pinned commit with the `/update-submodule` slash command (which
+runs `git submodule update --remote --merge` and stages the new pointer).
+
+`.claude/settings.local.json` is gitignored and holds personal permission
+overrides only; do not commit it.
+
 ## Architecture
 
 ### Flow
