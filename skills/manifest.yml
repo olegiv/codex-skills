@@ -22,3 +22,11 @@ skills:
     tags: [php, drupal, quality]
     requires: []
     post_validate: "./scripts/quick_validate.py"
+
+  - name: claude-codex-dual-pass
+    path: skills/claude-codex-dual-pass
+    enabled: true
+    owner: team-ai
+    tags: [claude, codex, workflow]
+    requires: []
+    post_validate: ""
