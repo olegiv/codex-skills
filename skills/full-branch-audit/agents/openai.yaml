@@ -1,0 +1,7 @@
+interface:
+  display_name: "Full Branch Audit"
+  short_description: "Independent whole-branch code validation"
+  default_prompt: "Use $full-branch-audit to audit the entire current checkout without changing it."
+
+policy:
+  allow_implicit_invocation: true

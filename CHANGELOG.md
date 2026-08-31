@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `full-branch-audit` — Implicit whole-checkout review workflow that records
+  the current Git state, launches a blind ephemeral read-only Codex reviewer,
+  independently corroborates candidates, and verifies snapshot stability
+  before reporting findings. Includes a managed global `AGENTS.md` snippet for
+  consistent use across machines.
+
 ## [0.1.0] - 2026-04-27
 
 Initial public release of the codex-skills repository.

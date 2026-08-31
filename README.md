@@ -50,6 +50,7 @@ Install selected skills only:
 ```bash
 ./scripts/install.sh --skills drupal-sdc-figma-parity
 ./scripts/install.sh --skills claude-codex-dual-pass
+./scripts/install.sh --skills full-branch-audit
 ```
 
 Update linked/copied skills and run validation:
@@ -150,6 +151,13 @@ cc /project:test accept
 cc /user:security-audit read-only
 ```
 
+Independent current-branch audit example:
+
+```text
+Use $full-branch-audit to scan the entire current checkout, including
+uncommitted and untracked files.
+```
+
 ## AGENTS.md Snippet Helpers
 
 The `claude-codex-dual-pass` skill includes helper scripts for projects
@@ -166,6 +174,15 @@ Insert or update the managed snippet explicitly:
 ```bash
 $CODEX_HOME/skills/claude-codex-dual-pass/scripts/apply_agents_snippet.sh <project-root>
 ```
+
+Enable independent full-branch audits globally on one machine:
+
+```bash
+$CODEX_HOME/skills/full-branch-audit/scripts/apply_agents_snippet.sh
+```
+
+Run that command after installing or updating the skill on every Mac that
+should use the same audit policy.
 
 ## Troubleshooting
 

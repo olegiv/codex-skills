@@ -15,6 +15,14 @@ skills:
     requires: []
     post_validate: ""
 
+  - name: full-branch-audit
+    path: skills/full-branch-audit
+    enabled: true
+    owner: team-ai
+    tags: [git, review, audit, security]
+    requires: []
+    post_validate: "bash -n scripts/*.sh"
+
   - name: php-prebuild-quality
     path: skills/php-prebuild-quality
     enabled: true
