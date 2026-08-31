@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- `full-branch-audit` now launches child reviewers with a clean temporary
+  Codex home, authentication-only inheritance, and explicit recursion guards,
+  preventing the reviewer from invoking the audit skill again.
+
 ### Added
 
 - `full-branch-audit` — Implicit whole-checkout review workflow that records

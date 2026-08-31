@@ -21,7 +21,7 @@ skills:
     owner: team-ai
     tags: [git, review, audit, security]
     requires: []
-    post_validate: "bash -n scripts/*.sh"
+    post_validate: "bash -n scripts/*.sh && bash scripts/run_isolated_reviewer_test.sh"
 
   - name: php-prebuild-quality
     path: skills/php-prebuild-quality

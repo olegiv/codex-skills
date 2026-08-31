@@ -20,6 +20,9 @@ before reporting it.
 - Remain read-only unless the user separately asks for fixes. Do not edit, stage, commit, push, post
   review comments, or mutate external state during the audit.
 - Give the isolated reviewer no earlier findings, suspected defects, or desired answer.
+- Never launch an isolated reviewer from inside an isolated reviewer. If
+  `CODEX_FULL_BRANCH_AUDIT_CHILD=1` is present, perform the assigned review directly and do not
+  invoke this skill, another Codex process, a subagent, or any delegation mechanism.
 - Continue through the whole repository after finding the first defect. Passing tests and scanners
   do not prove semantic or operational correctness.
 - Report only concrete, reachable defects with a user-visible, security, data-integrity, deployment,
@@ -53,16 +56,26 @@ part of an audit.
 ### 3. Run a blind isolated reviewer
 
 Read [references/reviewer-prompt.md](references/reviewer-prompt.md) and pass it unchanged to a fresh
-local Codex process rooted at the repository:
+local Codex process with the bundled launcher:
 
 ```sh
-codex exec --ephemeral --sandbox read-only --color never -C <repo> "$(cat <skill-dir>/references/reviewer-prompt.md)"
+<skill-dir>/scripts/run_isolated_reviewer.sh <repo>
 ```
 
-Use the strongest locally available reviewer configuration appropriate to the repository. Do not
-reuse the editing conversation, an earlier review session, or an output-seeded follow-up. If the
-local Codex executable is unavailable, report that independent review is blocked; do not present an
-in-context self-review as equivalent.
+The launcher creates a mode-0700 temporary `CODEX_HOME`, exposes authentication only, ignores the
+normal user configuration, and supplies a developer-level recursion guard. It does not expose user
+skills, plugins, global `AGENTS.md`, rules, memories, or prior sessions. It also uses ephemeral,
+read-only, never-approve execution and removes the temporary home on exit.
+
+Do not replace the launcher with a direct `codex exec` call using the normal `CODEX_HOME`: the
+isolated reviewer would inherit this skill and could recursively launch another reviewer. Use the
+strongest locally available reviewer configuration appropriate to the repository. Optional
+`CODEX_REVIEW_MODEL` and `CODEX_REVIEW_REASONING` environment variables select a model and reasoning
+effort without copying the normal user configuration.
+
+Do not reuse the editing conversation, an earlier review session, or an output-seeded follow-up. If
+the local Codex executable or usable authentication is unavailable, report that independent review
+is blocked; do not present an in-context self-review as equivalent.
 
 For broad, security-sensitive, or release-critical repositories, run a second fresh challenger with
 the same full-tree scope and a platform/security/lifecycle emphasis. Keep it blind to the first
