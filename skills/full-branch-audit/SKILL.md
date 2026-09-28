@@ -1,6 +1,6 @@
 ---
 name: full-branch-audit
-description: Perform an independent, read-only audit of the entire current Git checkout—committed HEAD plus staged, unstaged, and untracked files—when the user asks to scan the current branch, check again for findings, audit before commit, or match GitHub Codex review quality. Do not use when the user explicitly limits the review to one PR diff or commit.
+description: Perform an independent, read-only audit of the entire current Git checkout—committed HEAD plus staged, unstaged, and untracked files—only when the user explicitly asks for a whole-checkout audit of the current branch or names this skill. Do not use for pull-request review findings, re-checking findings, or matching GitHub Codex review quality (use pr-fix), and do not use when the user limits the review to one PR diff or commit.
 metadata:
   short-description: Independent whole-branch code validation
 ---

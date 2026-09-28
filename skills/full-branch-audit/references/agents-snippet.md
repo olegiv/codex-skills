@@ -1,9 +1,10 @@
 <!-- codex-skill:full-branch-audit:start -->
 ### Independent Full-Branch Audits
 
-When the user asks to audit or review the current branch, check again for remaining findings,
-perform a pre-commit full review, or match GitHub Codex review quality, invoke
-`$full-branch-audit`.
+Invoke `$full-branch-audit` only when the user explicitly names it or asks for a whole-checkout
+audit of the current branch. Do not invoke it to fix, re-check, or "make sure there are no more"
+pull-request review findings, or to match GitHub Codex review quality: those requests use
+`$pr-fix`, which reviews only the pull-request diff with `codex exec review --base`.
 
 Audit the exact current checkout: committed HEAD plus staged, unstaged, and untracked files. A base
 branch is context only, never the review scope. Use a fresh, blind, ephemeral read-only Codex process
